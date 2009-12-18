@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Vaadin-License-Title: LGPL
+Implementation-Vendor: -
+Implementation-Title: TinyMCEEditor
+Implementation-Version: 1.0
+Vaadin-Package-Version: 1
+Vaadin-Widgetsets: com.vaadin.tinymceeditor.widgetset.TinymceeditorWid
+ getset
+Class-Path: 
+
