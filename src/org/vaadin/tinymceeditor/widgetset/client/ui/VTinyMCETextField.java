@@ -1,4 +1,6 @@
-package com.vaadin.tinymceeditor.widgetset.client.ui;
+package org.vaadin.tinymceeditor.widgetset.client.ui;
+
+import org.vaadin.tinymceeditor.widgetset.client.ui.TinyMCEService.OnChangeListener;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.NativeEvent;
@@ -7,7 +9,6 @@ import com.vaadin.terminal.gwt.client.ApplicationConnection;
 import com.vaadin.terminal.gwt.client.BrowserInfo;
 import com.vaadin.terminal.gwt.client.Paintable;
 import com.vaadin.terminal.gwt.client.UIDL;
-import com.vaadin.tinymceeditor.widgetset.client.ui.TinyMCEService.OnChangeListener;
 
 /**
  * Client side widget which communicates with the server. Messages from the

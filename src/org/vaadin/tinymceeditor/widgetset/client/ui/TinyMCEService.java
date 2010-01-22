@@ -1,4 +1,4 @@
-package com.vaadin.tinymceeditor.widgetset.client.ui;
+package org.vaadin.tinymceeditor.widgetset.client.ui;
 
 import com.google.gwt.dom.client.NativeEvent;
 
@@ -38,11 +38,11 @@ public class TinyMCEService {
 	        
 	        setup : function(ed) {
       			ed.onChange.add(function(ed, e) {
-	 				listener.@com.vaadin.tinymceeditor.widgetset.client.ui.TinyMCEService.OnChangeListener::onChange()();
+	 				listener.@org.vaadin.tinymceeditor.widgetset.client.ui.TinyMCEService.OnChangeListener::onChange()();
       			});
 	        
       			ed.onEvent.add(function(ed, e) {
-	 				listener.@com.vaadin.tinymceeditor.widgetset.client.ui.TinyMCEService.OnChangeListener::onEvent(Lcom/google/gwt/dom/client/NativeEvent;)(e);
+	 				listener.@org.vaadin.tinymceeditor.widgetset.client.ui.TinyMCEService.OnChangeListener::onEvent(Lcom/google/gwt/dom/client/NativeEvent;)(e);
       			});
       		}
 	    };

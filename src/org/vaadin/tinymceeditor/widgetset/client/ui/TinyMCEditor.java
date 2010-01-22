@@ -1,4 +1,4 @@
-package com.vaadin.tinymceeditor.widgetset.client.ui;
+package org.vaadin.tinymceeditor.widgetset.client.ui;
 
 import com.google.gwt.core.client.JavaScriptObject;
 

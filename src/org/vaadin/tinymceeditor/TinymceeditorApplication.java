@@ -1,4 +1,4 @@
-package com.vaadin.tinymceeditor;
+package org.vaadin.tinymceeditor;
 
 import com.vaadin.Application;
 import com.vaadin.data.Property;

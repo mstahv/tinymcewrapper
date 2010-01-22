@@ -1,4 +1,4 @@
-package com.vaadin.tinymceeditor;
+package org.vaadin.tinymceeditor;
 
 import com.vaadin.terminal.PaintException;
 import com.vaadin.terminal.PaintTarget;
@@ -7,7 +7,7 @@ import com.vaadin.ui.TextField;
 /**
  * Server side component for the VTinyMCETextField widget.
  */
-@com.vaadin.ui.ClientWidget(com.vaadin.tinymceeditor.widgetset.client.ui.VTinyMCETextField.class)
+@com.vaadin.ui.ClientWidget(org.vaadin.tinymceeditor.widgetset.client.ui.VTinyMCETextField.class)
 public class TinyMCETextField extends TextField {
 
 	private static final long serialVersionUID = -2109451005591590647L;
