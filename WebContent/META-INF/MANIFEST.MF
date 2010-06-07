@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
-Vaadin-License-Title: LGPL
+Vaadin-License-Title: Apache2
 Implementation-Vendor: -
-Implementation-Title: TinyMCEEditor
-Implementation-Version: 1.0
+Implementation-Title: Vaadin wrapper for TinyMCE
+Implementation-Version: 1.2
 Vaadin-Package-Version: 1
 Vaadin-Widgetsets: org.vaadin.tinymceeditor.widgetset.TinymceeditorWid
  getset
