@@ -74,7 +74,8 @@ public class VTinyMCETextField extends Widget implements Paintable,
 
 		if (!inited) {
 			getElement().setInnerHTML(uidl.getStringVariable("text"));
-			String config = uidl.hasAttribute("conf") ? uidl.getStringAttribute("conf") : null;
+			String config = uidl.hasAttribute("conf") ? uidl
+					.getStringAttribute("conf") : null;
 			TinyMCEService.loadEditor(paintableId, this, config);
 			inited = true;
 		} else {
@@ -84,23 +85,38 @@ public class VTinyMCETextField extends Widget implements Paintable,
 
 	}
 
+	@Override
+	public void setVisible(boolean visible) {
+		if (inited) {
+			// TODO do some magic (extend api for hiding the editor) to support
+			// visible/hidden, now hiding setting visible again is not working
+			// propertly
+			TinyMCEditor tinyMCEditor = TinyMCEService.get(paintableId);
+		} else {
+			super.setVisible(visible);
+		}
+	}
+
 	public void onChange() {
-			updateVariable();
+		updateVariable();
 
 	}
 
 	private void updateVariable() {
 		TinyMCEditor tinyMCEditor = TinyMCEService.get(paintableId);
-		if(tinyMCEditor == null) return;
+		if (tinyMCEditor == null)
+			return;
 		String content = tinyMCEditor.getContent();
-		if(content != null && !content.equals(oldContent)) {
+		if (content != null && !content.equals(oldContent)) {
 			client.updateVariable(paintableId, "text", content, immediate);
 		}
 		oldContent = content;
 	}
 
 	public void onEvent(NativeEvent event) {
-		if(BrowserInfo.get().isSafari() && ("mouseup".equals(event.getType()) || "keyup".equals(event.getType()))) {
+		if (BrowserInfo.get().isSafari()
+				&& ("mouseup".equals(event.getType()) || "keyup".equals(event
+						.getType()))) {
 			// TinyMCE does not always fire onchange for safari
 			updateVariable();
 		}
