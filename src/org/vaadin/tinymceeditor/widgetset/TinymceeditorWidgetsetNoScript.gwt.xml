@@ -3,7 +3,8 @@
 <module>
 	<!-- WS Compiler: manually edited -->
 
-	<inherits name="com.vaadin.terminal.gwt.DefaultWidgetSet" />
-    <script src='tiny_mce/tiny_mce.js' />
+	<!-- Note, use this widgetset in case you include tinymce version by your 
+		self to the host page. -->
 
+	<inherits name="com.vaadin.terminal.gwt.DefaultWidgetSet" />
 </module>
