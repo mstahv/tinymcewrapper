@@ -32,6 +32,8 @@ public class VTinyMCETextField extends Widget implements Paintable,
 
 	private String oldContent;
 
+	private boolean browserNeedsAgressiveValueUpdate;
+
 	/**
 	 * The constructor should first call super() to initialize the component and
 	 * then handle any initialization relevant to Vaadin.
@@ -46,6 +48,15 @@ public class VTinyMCETextField extends Widget implements Paintable,
 		// This method call of the Paintable interface sets the component
 		// style name in DOM tree
 		setStyleName(CLASSNAME);
+
+		/*
+		 * On change events in tinymce are buggy (too late in some cases on some
+		 * browsers). For these browsers we update value on each event. I have
+		 * faced this on Safari and FF4 only, but reports from earlier FF and
+		 * Opera exist.
+		 */
+		browserNeedsAgressiveValueUpdate = BrowserInfo.get().isWebkit()
+				|| BrowserInfo.get().isFirefox() || BrowserInfo.get().isOpera();
 
 	}
 
@@ -114,7 +125,7 @@ public class VTinyMCETextField extends Widget implements Paintable,
 	}
 
 	public void onEvent(NativeEvent event) {
-		if (BrowserInfo.get().isSafari()
+		if (browserNeedsAgressiveValueUpdate
 				&& ("mouseup".equals(event.getType()) || "keyup".equals(event
 						.getType()))) {
 			// TinyMCE does not always fire onchange for safari
