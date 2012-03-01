@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.vaadin.addons</groupId>
 	<artifactId>vaadin-wrapper-for-tinymce</artifactId>
-	<version>1.5.0-SNAPSHOT</version>
+	<version>1.5.1-SNAPSHOT</version>
 	<properties>
 		<vaadin.addon.name>Vaadin wrapper for TinyMCE</vaadin.addon.name>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
