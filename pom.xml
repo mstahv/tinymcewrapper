@@ -1,108 +1,138 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.vaadin.addons</groupId>
-  <artifactId>vaadin-wrapper-for-tinymce</artifactId>
-  <version>1.5.0-SNAPSHOT</version>
-  <properties>
-  	<vaadin.addon.name>Vaadin wrapper for TinyMCE</vaadin.addon.name>
-  	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
-  
-  <description>Richt text editor with more than enough features.</description>
-  <dependencies>
-          <dependency>
-                  <groupId>com.vaadin</groupId>
-                  <artifactId>vaadin</artifactId>
-                  <version>6.7.5</version>
-          </dependency>
-          <dependency>
-                  <groupId>org.eclipse.jetty</groupId>
-                  <artifactId>jetty-servlet</artifactId>
-                  <scope>test</scope>
-                  <version>8.1.1.v20120215</version>
-          </dependency>
-          <dependency>
-                  <groupId>javax.servlet</groupId>
-                  <artifactId>javax.servlet-api</artifactId>
-                  <version>3.0.1</version>
-                  <scope>test</scope>
-          </dependency>
-          <dependency>
-                  <groupId>org.seleniumhq.selenium</groupId>
-                  <artifactId>selenium-firefox-driver</artifactId>
-                  <version>2.19.0</version>
-                  <scope>test</scope>
-          </dependency>
-          <dependency>
-                  <groupId>junit</groupId>
-                  <artifactId>junit</artifactId>
-                  <version>4.9</version>
-                  <scope>test</scope>
-          </dependency>
-  </dependencies>
-  <!-- This is needed for the sources required by the GWT compiler to be
-                          included in the produced JARs -->
-                  <resources>
-                          <resource>
-                                  <directory>src/main/java</directory>
-                          </resource>
-                          <resource>
-                                  <directory>src/main/resources</directory>
-                          </resource>
-                          <resource>
-                                  <directory>src/test/java</directory>
-                          </resource>
-                  </resources>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.vaadin.addons</groupId>
+	<artifactId>vaadin-wrapper-for-tinymce</artifactId>
+	<version>1.5.0-SNAPSHOT</version>
+	<properties>
+		<vaadin.addon.name>Vaadin wrapper for TinyMCE</vaadin.addon.name>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 
-  <build>
-      <!-- Compile custom GWT components or widget dependencies with the GWT
-              compiler -->
-      <plugin>
-              <groupId>org.codehaus.mojo</groupId>
-              <artifactId>gwt-maven-plugin</artifactId>
-              <version>2.3.0-1</version>
-              <configuration>
-                      <webappDirectory>${project.build.directory}/testwebapp/VAADIN/widgetsets</webappDirectory>
-                      <extraJvmArgs>-Xmx1024M -Xss1024k</extraJvmArgs>
-                      <hostedWebapp>${project.build.directory}/testwebapp</hostedWebapp>
-                      <noServer>true</noServer>
-                      <module>org.vaadin.tinymceeditor.widgetset.TinymceeditorWidgetset</module>
-                      <runTarget>http://localhost:9998/</runTarget>
-                      <draftCompile>true</draftCompile>
-                      <style>PRETTY</style>
-              </configuration>
-      </plugin>
-          <pluginManagement>
-                  <plugins>
-                          <plugin>
-                                  <groupId>org.apache.maven.plugins</groupId>
-                                  <artifactId>maven-jar-plugin</artifactId>
-                                  <configuration>
-                                          <archive>
-                                                  <index>true</index>
-                                                  <manifest>
-                                                          <addClasspath>true</addClasspath>
-                                                          <!-- Implementation-Title and Implementation-Version come from the 
-                                                                  POM by default -->
-                                                          <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                                                  </manifest>
-                                                  <manifestEntries>
-                                                          <!-- Package format version - do not change -->
-                                                          <Vaadin-Package-Version>1</Vaadin-Package-Version>
 
-                                                          <!-- Add-on specific fields to update -->
+	<description>Richt text editor with more than enough features.</description>
+	<dependencies>
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin</artifactId>
+			<version>6.7.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-servlet</artifactId>
+			<scope>test</scope>
+			<version>8.1.1.v20120215</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.0.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-firefox-driver</artifactId>
+			<version>2.19.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.9</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-user</artifactId>
+			<version>2.3.0</version>
+			<scope>compile</scope>
+		</dependency>
+	</dependencies>
 
-                                                          <!-- Implementation-Title and Implementation-Version come from the 
-                                                                  POM by default -->
-                                                          <Implementation-Title>${vaadin.addon.name}</Implementation-Title>
-                                                          <Vaadin-Widgetsets>org.vaadin.tinymceeditor.widgetset.TinymceeditorWidgetset</Vaadin-Widgetsets>
-                                                  </manifestEntries>
-                                          </archive>
-                                  </configuration>
-                          </plugin>
-                  </plugins>
-          </pluginManagement>
+	<build>
+		<!-- This is needed for the sources required by the GWT compiler to be 
+			included in the produced JARs -->
+		<resources>
+			<resource>
+				<directory>src/main/java</directory>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+		</resources>
 
-  </build>
-  
+		<plugins>
+			<!-- Compile custom GWT components or widget dependencies with the GWT 
+				compiler -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>gwt-maven-plugin</artifactId>
+				<version>2.3.0-1</version>
+				<configuration>
+					<webappDirectory>${project.build.directory}/testwebapp/VAADIN/widgetsets</webappDirectory>
+					<extraJvmArgs>-Xmx1024M -Xss1024k</extraJvmArgs>
+					<hostedWebapp>${project.build.directory}/testwebapp</hostedWebapp>
+					<noServer>true</noServer>
+					<module>org.vaadin.tinymceeditor.widgetset.TinymceeditorWidgetset</module>
+					<runTarget>http://localhost:9998/</runTarget>
+					<draftCompile>true</draftCompile>
+					<style>PRETTY</style>
+				</configuration>
+			</plugin>
+			<!-- This creates a zip file of jar and sources jar. Makes sources available 
+				to maven users automatically?! We could also use this to package required 
+				dependecies for those poor developer souls that still dont know how to use 
+				a build system that supports transient dependencies... -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<appendAssemblyId>false</appendAssemblyId>
+					<descriptors>
+						<descriptor>assembly.xml</descriptor>
+					</descriptors>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<configuration>
+						<archive>
+							<index>true</index>
+							<manifest>
+								<!-- Implementation-Title and Implementation-Version come from the 
+									POM by default -->
+								<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+							</manifest>
+							<manifestEntries>
+								<!-- Package format version - do not change -->
+								<Vaadin-Package-Version>1</Vaadin-Package-Version>
+
+								<!-- Add-on specific fields to update -->
+
+								<!-- Implementation-Title and Implementation-Version come from the 
+									POM by default -->
+								<Implementation-Title>${vaadin.addon.name}</Implementation-Title>
+								<Vaadin-Widgetsets>org.vaadin.tinymceeditor.widgetset.TinymceeditorWidgetset</Vaadin-Widgetsets>
+							</manifestEntries>
+						</archive>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
+	</build>
+
 </project>
