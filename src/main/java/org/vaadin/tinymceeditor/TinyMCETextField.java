@@ -1,14 +1,16 @@
 package org.vaadin.tinymceeditor;
 
-import com.vaadin.terminal.PaintException;
-import com.vaadin.terminal.PaintTarget;
+import com.vaadin.annotations.JavaScript;
+import com.vaadin.server.PaintException;
+import com.vaadin.server.PaintTarget;
+import com.vaadin.ui.LegacyComponent;
 import com.vaadin.ui.TextField;
 
 /**
  * Server side component for the VTinyMCETextField widget.
  */
-@com.vaadin.ui.ClientWidget(org.vaadin.tinymceeditor.widgetset.client.ui.VTinyMCETextField.class)
-public class TinyMCETextField extends TextField {
+@JavaScript("theme://../../tiny_mce/tiny_mce.js")
+public class TinyMCETextField extends TextField implements LegacyComponent {
 
 	private static final long serialVersionUID = -2109451005591590647L;
 	private String config;

@@ -71,7 +71,7 @@ public class TinyMCEService {
 	 * @param id
 	 * @return the overlay for TinyMCE.Editor or null in not yet inited
 	 */
-	public native static TinyMCEditor get(String id)
+	public static native TinyMCEditor get(String id)
 	/*-{
 		return $wnd.tinyMCE.get(id);
 	}-*/;
