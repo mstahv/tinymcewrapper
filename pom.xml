@@ -7,15 +7,23 @@
 	<properties>
 		<vaadin.addon.name>Vaadin wrapper for TinyMCE</vaadin.addon.name>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<vaadin.version>7.0.0</vaadin.version>
+		<vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
 	</properties>
 
 
-	<description>Richt text editor with more than enough features.</description>
+	<description>Rich text editor with more than enough features.</description>
 	<dependencies>
 		<dependency>
 			<groupId>com.vaadin</groupId>
-			<artifactId>vaadin</artifactId>
-			<version>6.7.5</version>
+			<artifactId>vaadin-server</artifactId>
+			<version>${vaadin.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-client</artifactId>
+			<version>${vaadin.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
@@ -32,7 +40,7 @@
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-firefox-driver</artifactId>
-			<version>2.19.0</version>
+			<version>2.33.0</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -42,11 +50,12 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.google.gwt</groupId>
-			<artifactId>gwt-user</artifactId>
-			<version>2.3.0</version>
-			<scope>compile</scope>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-client-compiler</artifactId>
+			<version>${vaadin.version}</version>
+			<scope>provided</scope>
 		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -62,23 +71,51 @@
 		</resources>
 
 		<plugins>
-			<!-- Compile custom GWT components or widget dependencies with the GWT 
-				compiler -->
+
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>gwt-maven-plugin</artifactId>
-				<version>2.3.0-1</version>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.0</version>
 				<configuration>
-					<webappDirectory>${project.build.directory}/testwebapp/VAADIN/widgetsets</webappDirectory>
-					<extraJvmArgs>-Xmx1024M -Xss1024k</extraJvmArgs>
-					<hostedWebapp>${project.build.directory}/testwebapp</hostedWebapp>
-					<noServer>true</noServer>
-					<module>org.vaadin.tinymceeditor.widgetset.TinymceeditorWidgetset</module>
-					<runTarget>http://localhost:9998/</runTarget>
-					<draftCompile>true</draftCompile>
-					<style>PRETTY</style>
+					<source>1.6</source>
+					<target>1.6</target>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>com.vaadin</groupId>
+				<artifactId>vaadin-maven-plugin</artifactId>
+				<version>${vaadin.plugin.version}</version>
+				<configuration>
+					<extraJvmArgs>-Xmx512M -Xss1024k</extraJvmArgs>
+					<!-- We are doing "inplace" but into subdir VAADIN/widgetsets. This 
+						way compatible with Vaadin eclipse plugin. -->
+					<webappDirectory>${project.build.directory}/testwebapp/VAADIN/widgetsets
+					</webappDirectory>
+					<hostedWebapp>${project.build.directory}/testwebapp/VAADIN/widgetsets
+					</hostedWebapp>
+					<noServer>true</noServer>
+					<!-- Remove draftCompile when project is ready -->
+					<draftCompile>false</draftCompile>
+					<compileReport>true</compileReport>
+					<style>OBF</style>
+					<strict>true</strict>
+					<runTarget>http://localhost:8080/</runTarget>
+				</configuration>
+				<executions>
+					<!-- You are free to mark this as permanently ignored in Eclipse -->
+					<execution>
+						<configuration>
+							<!-- if you don't specify any modules, the plugin will find them -->
+						</configuration>
+						<goals>
+							<goal>resources</goal>
+							<goal>update-widgetset</goal>
+							<goal>compile</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 			<!-- This creates a zip file of jar and sources jar. Makes sources available 
 				to maven users automatically?! We could also use this to package required 
 				dependecies for those poor developer souls that still dont know how to use 
@@ -99,6 +136,29 @@
 						<goals>
 							<goal>single</goal>
 						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.6</version>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<!-- here the phase you need -->
+						<phase>package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/testwebapp/</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/main/resources</directory>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
@@ -130,6 +190,34 @@
 						</archive>
 					</configuration>
 				</plugin>
+						<!--This plugin's configuration is used to store Eclipse m2e settings 
+				only. It has no influence on the Maven build itself. -->
+			<plugin>
+				<groupId>org.eclipse.m2e</groupId>
+				<artifactId>lifecycle-mapping</artifactId>
+				<version>1.0.0</version>
+				<configuration>
+					<lifecycleMappingMetadata>
+						<pluginExecutions>
+							<pluginExecution>
+								<pluginExecutionFilter>
+									<groupId>com.vaadin</groupId>
+									<artifactId>vaadin-maven-plugin</artifactId>
+									<versionRange>[7.0,)</versionRange>
+									<goals>
+										<goal>resources</goal>
+										<goal>update-widgetset</goal>
+										<goal>compile</goal>
+									</goals>
+								</pluginExecutionFilter>
+								<action>
+									<ignore></ignore>
+								</action>
+							</pluginExecution>
+						</pluginExecutions>
+					</lifecycleMappingMetadata>
+				</configuration>
+			</plugin>
 			</plugins>
 		</pluginManagement>
 
