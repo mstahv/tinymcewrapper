@@ -9,7 +9,7 @@ import com.vaadin.ui.TextField;
 /**
  * Server side component for the VTinyMCETextField widget.
  */
-@JavaScript("theme://../../tiny_mce/tiny_mce.js")
+@JavaScript("//cdn.tinymce.com/4/tinymce.min.js")
 public class TinyMCETextField extends TextField implements LegacyComponent {
 
 	private static final long serialVersionUID = -2109451005591590647L;
