@@ -41,6 +41,9 @@ public class TinymceeditorApplication extends UI {
 
 	@Override
 	protected void init(VaadinRequest request) {
+		
+		setPollInterval(4000);
+		
 		VerticalLayout content=new VerticalLayout();
 		content.addComponent(new Button("Hit server"));
 		TinyMCETextField tinyMCETextField = new TinyMCETextField();
@@ -66,7 +69,11 @@ public class TinymceeditorApplication extends UI {
 				new Notification("Content now: " + event.getProperty().getValue().toString(),"",Type.HUMANIZED_MESSAGE,true).show(Page.getCurrent());
 			}
 		});
+		
 		setContent(content);
+		
+		
+		
 	}
 
 }

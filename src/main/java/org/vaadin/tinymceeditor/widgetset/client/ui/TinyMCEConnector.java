@@ -5,7 +5,6 @@ import org.vaadin.tinymceeditor.widgetset.client.ui.TinyMCEService.OnChangeListe
 
 import com.google.gwt.dom.client.NativeEvent;
 import com.vaadin.client.ApplicationConnection;
-import com.vaadin.client.BrowserInfo;
 import com.vaadin.client.UIDL;
 import com.vaadin.client.ui.LegacyConnector;
 import com.vaadin.shared.ui.Connect;
@@ -15,7 +14,6 @@ import com.vaadin.shared.ui.textfield.AbstractTextFieldState;
 @Connect(TinyMCETextField.class) 
 public class TinyMCEConnector extends LegacyConnector  implements OnChangeListener{
 
-	private boolean browserNeedsAgressiveValueUpdate;
 	private String oldContent;
 	private ApplicationConnection client;
 	private boolean inited;
@@ -56,19 +54,17 @@ public class TinyMCEConnector extends LegacyConnector  implements OnChangeListen
 			String config = uidl.hasAttribute("conf") ? uidl.getStringAttribute("conf") : null;
 			//load the editor component
 			TinyMCEService.loadEditor(paintableId, this, config);
-			/*
-			 * On change events in tinymce are buggy (too late in some cases on some
-			 * browsers). For these browsers we update value on each event. I have
-			 * faced this on Safari and FF4 only, but reports from earlier FF and
-			 * Opera exist.
-			 */
-			browserNeedsAgressiveValueUpdate = BrowserInfo.get().isWebkit()
-					|| BrowserInfo.get().isFirefox() || BrowserInfo.get().isOpera();
 			//mark the editor initialized
 			inited = true;
-		} else{
+		} else {
+
 			//the editor is initialized, just update the text content
-			TinyMCEService.get(paintableId).setContent(getState().text);
+			// Also check if Vaadin decided to post the already known content to client
+			// This might cause invalid state in some rare conditions
+			boolean shouldSkipUpdate = oldContent != null && getState().text.equals(oldContent);
+			if(!shouldSkipUpdate) {
+				TinyMCEService.get(paintableId).setContent(getState().text);
+			}
 		}
 	}
 
@@ -92,11 +88,11 @@ public class TinyMCEConnector extends LegacyConnector  implements OnChangeListen
 	@Override
 	public void onEvent(NativeEvent event) {
 		// TinyMCE does not always fire onchange for safari, thus hook up the native events
-		if (browserNeedsAgressiveValueUpdate
-				&& ("mouseup".equals(event.getType()) || "keyup".equals(event
-						.getType()))) {
-			updateVariable();
-		}
+//		if (browserNeedsAgressiveValueUpdate
+//				&& ("mouseup".equals(event.getType()) || "keyup".equals(event
+//						.getType()))) {
+//			updateVariable();
+//		}
 	}
 
 	@Override
