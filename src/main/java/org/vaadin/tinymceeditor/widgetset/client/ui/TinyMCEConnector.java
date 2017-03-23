@@ -4,99 +4,90 @@ import org.vaadin.tinymceeditor.TinyMCETextField;
 import org.vaadin.tinymceeditor.widgetset.client.ui.TinyMCEService.OnChangeListener;
 
 import com.google.gwt.dom.client.NativeEvent;
-import com.vaadin.client.ApplicationConnection;
-import com.vaadin.client.UIDL;
-import com.vaadin.client.ui.LegacyConnector;
+import com.vaadin.client.communication.StateChangeEvent;
+import com.vaadin.client.ui.textfield.AbstractTextFieldConnector;
 import com.vaadin.shared.ui.Connect;
-import com.vaadin.shared.ui.textfield.AbstractTextFieldState;
+import org.vaadin.tinymceeditor.widgetset.shared.TinymceState;
 
+@Connect(value = TinyMCETextField.class, loadStyle = Connect.LoadStyle.EAGER)
+public class TinyMCEConnector extends AbstractTextFieldConnector implements OnChangeListener {
 
-@Connect(TinyMCETextField.class) 
-public class TinyMCEConnector extends LegacyConnector  implements OnChangeListener{
+    private boolean inited;
+    private Object oldContent;
+    private String paintableId;
 
-	private String oldContent;
-	private ApplicationConnection client;
-	private boolean inited;
-	private boolean immediate;
-	private String paintableId;
+    @Override
+    protected void init() {
+        super.init();
 
-	@Override
-	public VTinyMCETextField getWidget(){
-		return (VTinyMCETextField) super.getWidget();
-	}
+//        getWidget().addChangeHandler(event -> sendValueChange());
+//        getWidget().addDomHandler(event -> {
+//            getValueChangeHandler().scheduleValueChange();
+//        }, InputEvent.getType());
+    }
 
-	/**
-	 * Called whenever an update is received from the server
-	 */
-	@Override
-	public void updateFromUIDL(UIDL uidl, ApplicationConnection client) {
-		// This call should be made first.
-		// It handles sizes, captions, tooltips, etc. automatically.
-		if (client.updateComponent(getWidget(), uidl, true)) {
-			// If client.updateComponent returns true there has been no changes
-			// and we
-			// do not need to update anything.
-			return;
-		}
-		immediate = uidl.getBooleanAttribute("immediate");
-		// Save reference to server connection object to be able to send
-		// user interaction later
-		this.client = client;
+    @Override
+    public void onStateChanged(StateChangeEvent stateChangeEvent) {
+        super.onStateChanged(stateChangeEvent);
 
-		// Save the client side identifier (paintable id) for the widget
-		paintableId = uidl.getId();
-		getWidget().getElement().setId(paintableId);
+        // Save the client side identifier (paintable id) for the widget
+        paintableId = getState().id;
+        if(paintableId == null) {
+            paintableId = getConnectorId();
+        }
+        getWidget().getElement().setId(paintableId);
 
-		if (!inited) {
-			//set initial value
-			this.getWidget().getElement().setInnerHTML(getState().text);
-			//get optional configuration for the TinyMCE editor component
-			String config = uidl.hasAttribute("conf") ? uidl.getStringAttribute("conf") : null;
-			//load the editor component
-			TinyMCEService.loadEditor(paintableId, this, config);
-			//mark the editor initialized
-			inited = true;
-		} else {
+        if (!inited) {
+            //set initial value
+            this.getWidget().getElement().setInnerHTML(getState().text);
+            //load the editor component
+            TinyMCEService.loadEditor(paintableId, this, getState().conf);
+            //mark the editor initialized
+            inited = true;
+        } else {
 
-			//the editor is initialized, just update the text content
-			// Also check if Vaadin decided to post the already known content to client
-			// This might cause invalid state in some rare conditions
-			boolean shouldSkipUpdate = oldContent != null && getState().text.equals(oldContent);
-			if(!shouldSkipUpdate) {
-				TinyMCEService.get(paintableId).setContent(getState().text);
-			}
-		}
-	}
+            //the editor is initialized, just update the text content
+            // Also check if Vaadin decided to post the already known content to client
+            // This might cause invalid state in some rare conditions
+            boolean shouldSkipUpdate = oldContent != null && getState().text.equals(oldContent);
+            if (!shouldSkipUpdate) {
+                TinyMCEService.get(paintableId).setContent(getState().text);
+            }
+        }
+    }
 
+    @Override
+    public TinymceState getState() {
+        return (TinymceState) super.getState();
+    }
 
-	@Override
-	public void onChange() {
-		updateVariable();
+    @Override
+    public VTinyMCETextField getWidget() {
+        return (VTinyMCETextField) super.getWidget();
+    }
 
-	}
+    @Override
+    public void onChange() {
+        sendValueChange();
+    }
 
-	private void updateVariable() {
-		TinyMCEditor tinyMCEditor = TinyMCEService.get(paintableId);
-		if (tinyMCEditor == null) return;
-		String content = tinyMCEditor.getContent();
-		if (content != null && !content.equals(oldContent)) {
-			client.updateVariable(paintableId, "text", content, immediate);
-		}
-		oldContent = content;
-	}
+    @Override
+    public void onEvent(NativeEvent event) {
+        // Could hook lazy/eager mode here
+    }
 
-	@Override
-	public void onEvent(NativeEvent event) {
-		// TinyMCE does not always fire onchange for safari, thus hook up the native events
-//		if (browserNeedsAgressiveValueUpdate
-//				&& ("mouseup".equals(event.getType()) || "keyup".equals(event
-//						.getType()))) {
-//			updateVariable();
-//		}
-	}
+//
+//    private void updateVariable() {
+//        TinyMCEditor tinyMCEditor = TinyMCEService.get(paintableId);
+//        if (tinyMCEditor == null) {
+//            return;
+//        }
+//        String content = tinyMCEditor.getContent();
+//        if (content != null && !content.equals(oldContent)) {
+//            
+//            client.updateVariable(paintableId, "text", content, immediate);
+//        }
+//        oldContent = content;
+//    }
 
-	@Override
-	public AbstractTextFieldState getState() {
-		return (AbstractTextFieldState) super.getState();
-	}
 }
