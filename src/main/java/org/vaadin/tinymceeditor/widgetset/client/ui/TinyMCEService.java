@@ -62,7 +62,7 @@ public class TinyMCEService {
 	 */
 	public static native TinyMCEditor get(String id)
 	/*-{
-		return $wnd.tinyMCE.get(id);
+		return $wnd.tinymce.get(id);
 	}-*/;
 
 	public interface OnChangeListener {
