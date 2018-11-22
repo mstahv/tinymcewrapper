@@ -3,14 +3,25 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.vaadin.addons</groupId>
     <artifactId>vaadin-wrapper-for-tinymce</artifactId>
-    <version>4.1-SNAPSHOT</version>
+    <version>4.2-SNAPSHOT</version>
     <properties>
         <vaadin.addon.name>TinyMCE Wrapper</vaadin.addon.name>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <vaadin.version>8.0.3</vaadin.version>
         <vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
+        
+        <!-- ZIP Manifest fields -->
+        <Implementation-Version>${project.version}</Implementation-Version>
+        <!-- Must not change this because of the Directory -->
+        <Implementation-Title>${project.name}</Implementation-Title>
+        <Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
+        <Vaadin-License-Title>Apache License 2.0</Vaadin-License-Title>
+        <Vaadin-Addon>${project.artifactId}-${project.version}.jar</Vaadin-Addon>
     </properties>
 
+    <organization>
+        <name>Matti Tahvonen</name>
+    </organization>
 
     <description>Rich text editor with more than enough features.</description>
     <dependencies>
