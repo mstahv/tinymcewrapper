@@ -7,7 +7,7 @@ import org.vaadin.tinymceeditor.widgetset.shared.TinymceState;
 /**
  * Server side component for the VTinyMCETextField widget.
  */
-@JavaScript("//cdn.tinymce.com/4/tinymce.min.js")
+@JavaScript("//cdn.tinymce.com/4.6/tinymce.min.js")
 public class TinyMCETextField extends TextField {
 
     private static final long serialVersionUID = -2109451005591590647L;
