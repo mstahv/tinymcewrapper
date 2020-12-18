@@ -1,5 +1,9 @@
 package org.vaadin.tinymceeditor.widgetset.client.ui;
 
+import com.google.gwt.core.client.Callback;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.ScriptInjector;
 import org.vaadin.tinymceeditor.TinyMCETextField;
 import org.vaadin.tinymceeditor.widgetset.client.ui.TinyMCEService.OnChangeListener;
 
@@ -7,10 +11,32 @@ import com.google.gwt.dom.client.NativeEvent;
 import com.vaadin.client.communication.StateChangeEvent;
 import com.vaadin.client.ui.textfield.AbstractTextFieldConnector;
 import com.vaadin.shared.ui.Connect;
+import java.util.ArrayList;
 import org.vaadin.tinymceeditor.widgetset.shared.TinymceState;
 
 @Connect(value = TinyMCETextField.class, loadStyle = Connect.LoadStyle.EAGER)
 public class TinyMCEConnector extends AbstractTextFieldConnector implements OnChangeListener {
+    
+    private static boolean tinymeInitialized = false;
+    static {
+        String tinymcscript = GWT.getModuleBaseForStaticFiles() + "tinymce/tinymce.min.js";
+        ScriptInjector.fromUrl(tinymcscript).setWindow(ScriptInjector.TOP_WINDOW).setCallback(new Callback<Void, Exception>() {
+            @Override
+            public void onFailure(Exception reason) {
+                throw new RuntimeException("Error loading tinymce");
+            }
+
+            @Override
+            public void onSuccess(Void result) {
+                for (Scheduler.ScheduledCommand lazyInit : lazyInits) {
+                    lazyInit.execute();
+                }
+                tinymeInitialized = true;
+            }
+        }).inject();
+    }
+    
+    private static ArrayList<Scheduler.ScheduledCommand> lazyInits = new ArrayList<>();
 
     private boolean inited;
     private Object oldContent;
@@ -19,11 +45,6 @@ public class TinyMCEConnector extends AbstractTextFieldConnector implements OnCh
     @Override
     protected void init() {
         super.init();
-
-//        getWidget().addChangeHandler(event -> sendValueChange());
-//        getWidget().addDomHandler(event -> {
-//            getValueChangeHandler().scheduleValueChange();
-//        }, InputEvent.getType());
     }
 
     @Override
@@ -32,18 +53,30 @@ public class TinyMCEConnector extends AbstractTextFieldConnector implements OnCh
 
         // Save the client side identifier (paintable id) for the widget
         paintableId = getState().id;
-        if(paintableId == null) {
+        if (paintableId == null) {
             paintableId = getConnectorId();
         }
         getWidget().getElement().setId(paintableId);
 
         if (!inited) {
-            //set initial value
-            this.getWidget().getElement().setInnerHTML(getState().text);
-            //load the editor component
-            TinyMCEService.loadEditor(paintableId, this, getState().conf);
-            //mark the editor initialized
-            inited = true;
+            Scheduler.ScheduledCommand cmd = new Scheduler.ScheduledCommand() {
+                @Override
+                public void execute() {
+                    //set initial value
+                    getWidget().getElement().setInnerHTML(getState().text);
+                    //load the editor component
+                    TinyMCEService.loadEditor(paintableId, TinyMCEConnector.this, getState().conf);
+                    //mark the editor initialized
+                    inited = true;
+                }
+            };
+            
+            if(tinymeInitialized) {
+                cmd.execute();
+            } else {
+                lazyInits.add(cmd);
+            }
+            
         } else {
 
             //the editor is initialized, just update the text content
@@ -89,5 +122,4 @@ public class TinyMCEConnector extends AbstractTextFieldConnector implements OnCh
 //        }
 //        oldContent = content;
 //    }
-
 }

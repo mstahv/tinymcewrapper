@@ -17,7 +17,7 @@ public class TinyMCEService {
 	 */
 	public static native void loadEditor(String id, OnChangeListener listener, String cc)
 	/*-{
-	 
+
 	 	var conf = {
 	    
 			selector : '#' + id ,
@@ -47,8 +47,7 @@ public class TinyMCEService {
 			 	}
 		 	}
 	 	} catch (e) {}
-	 	
-	 	
+                
 	    $wnd.tinymce.init(conf);
 
 	}-*/
@@ -62,7 +61,7 @@ public class TinyMCEService {
 	 */
 	public static native TinyMCEditor get(String id)
 	/*-{
-		return $wnd.tinymce.get(id);
+		return $wnd.tinyMCE.get(id);
 	}-*/;
 
 	public interface OnChangeListener {
