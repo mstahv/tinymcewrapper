@@ -22,6 +22,17 @@
     <organization>
         <name>Matti Tahvonen</name>
     </organization>
+    
+    <repositories>
+        <repository>
+            <id>Vaadin Directory</id>
+            <url>https://maven.vaadin.com/vaadin-addons</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
 
     <description>Rich text editor with more than enough features.</description>
     <dependencies>
