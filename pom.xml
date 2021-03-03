@@ -7,7 +7,7 @@
     <properties>
         <vaadin.addon.name>TinyMCE Wrapper</vaadin.addon.name>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <vaadin.version>8.0.3</vaadin.version>
+        <vaadin.version>8.12.3</vaadin.version>
         <vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
         
         <!-- ZIP Manifest fields -->
