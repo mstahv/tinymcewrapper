@@ -1,5 +1,6 @@
 package org.vaadin.tinymceeditor;
 
+import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.Button;
@@ -7,9 +8,11 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
+import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
+@PreserveOnRefresh
 public class TinymceeditorApplication extends UI {
 
     private TinyMCETextField tinyMCETextField;
@@ -20,11 +23,15 @@ public class TinymceeditorApplication extends UI {
 
         setPollInterval(4000);
 
-        VerticalLayout content = new VerticalLayout();
-        content.setSpacing(true);
-        content.setMargin(true);
-
-        content.addComponent(new Button("Show Html in editor 1", new ClickListener() {
+        TabSheet tabSheet = new TabSheet();
+        tabSheet.setSizeFull();
+        
+        VerticalLayout content1 = new VerticalLayout();
+        content1.setSpacing(true);
+        content1.setMargin(true);
+        content1.setSizeFull();
+        
+        content1.addComponent(new Button("Show Html in editor 1", new ClickListener() {
 
             @Override
             public void buttonClick(ClickEvent event) {
@@ -35,7 +42,7 @@ public class TinymceeditorApplication extends UI {
             }
         }));
         tinyMCETextField = new TinyMCETextField();
-        content.addComponent(tinyMCETextField);
+        content1.addComponent(tinyMCETextField);
 
         tinyMCETextField.setValue("Some test content<h1>Vaadin rocks!</h1>");
 
@@ -43,8 +50,12 @@ public class TinymceeditorApplication extends UI {
             new Notification("Content now: " + event.getValue(), "", Type.HUMANIZED_MESSAGE, true).show(Page.getCurrent());
         }
         );
-
-        content.addComponent(new Button("Show Html in editor 2", new ClickListener() {
+        
+        VerticalLayout content2 = new VerticalLayout();
+        content2.setSpacing(true);
+        content2.setMargin(true);
+        content2.setSizeFull();
+        content2.addComponent(new Button("Show Html in editor 2", new ClickListener() {
 
             @Override
             public void buttonClick(ClickEvent event) {
@@ -62,12 +73,16 @@ public class TinymceeditorApplication extends UI {
                 + "menubar: false,"
                 + "plugins: [ 'advlist autolink lists link image charmap print preview anchor','searchreplace visualblocks code fullscreen','insertdatetime media table contextmenu paste' ], "
                 + "toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image'}");
-        content.addComponent(tinyMCETextField2);
+        content2.addComponent(tinyMCETextField2);
 
         tinyMCETextField2.addValueChangeListener(event -> {
             new Notification("Content now: " + event.getValue(), "", Type.HUMANIZED_MESSAGE, true).show(Page.getCurrent());
         });
-        setContent(content);
+
+        tabSheet.addTab(content1,"Editor 1");
+        tabSheet.addTab(content2,"Editor 2");
+        
+        setContent(tabSheet);
 
     }
 

@@ -44,6 +44,7 @@ public class TinyMCEConnector extends AbstractTextFieldConnector implements OnCh
 
     @Override
     protected void init() {
+        getWidget().setListener(TinyMCEConnector.this);
         super.init();
     }
 
@@ -57,6 +58,7 @@ public class TinyMCEConnector extends AbstractTextFieldConnector implements OnCh
             paintableId = getConnectorId();
         }
         getWidget().getElement().setId(paintableId);
+        getWidget().setConf(getState().conf);
 
         if (!inited) {
             Scheduler.ScheduledCommand cmd = new Scheduler.ScheduledCommand() {
@@ -68,6 +70,7 @@ public class TinyMCEConnector extends AbstractTextFieldConnector implements OnCh
                     TinyMCEService.loadEditor(paintableId, TinyMCEConnector.this, getState().conf);
                     //mark the editor initialized
                     inited = true;
+                    getWidget().setInitialized();
                 }
             };
             

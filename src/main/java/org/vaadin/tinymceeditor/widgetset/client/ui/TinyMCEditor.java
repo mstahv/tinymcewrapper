@@ -15,6 +15,7 @@ public class TinyMCEditor extends JavaScriptObject {
 	protected TinyMCEditor() {
 	}
 
+	
 	public final native boolean isDirty()
 	/*-{
 		return this.isDirty();
@@ -30,4 +31,9 @@ public class TinyMCEditor extends JavaScriptObject {
 		return this.setContent(stringVariable);
 	}-*/;
 
+    public final native void setContentEditable(boolean editable)
+    /*-{
+	    return this.getBody().setAttribute('contenteditable',editable);
+	}-*/;
+	
 }
